@@ -1,0 +1,106 @@
+:root {
+    --primaryColor: #0e2c59;
+    --secondaryColor: #0096bf;
+    --thirdColor: #ff0700;
+    --principalFont: "Nunito", sans-serif;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--principalFont)
+}
+
+.headerPrincipal {
+    height: 97vh;
+    width: 7%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 0 auto;
+    background-color: var(--primaryColor);
+    padding: 0px 10px;
+    border-radius: 20px;
+}
+
+.containerLogoMabe,
+.containerLogoMudi {
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.logoMabe {
+    width: 90%;
+    margin-top: 30px;
+}
+
+.logoMudi {
+    width: 120px;
+    margin-bottom: 15px;
+}
+
+.iconMenu {
+    width: 30px;
+    border: solid white 2px;
+    padding: 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+.iconMenu:hover {
+    transition: all .2s ease-in-out;
+    scale: 1.1;
+    background-color: var(--thirdColor);
+}
+
+.iconSelect {
+    background-color: var(--thirdColor);
+}
+
+.containerIconsMenu {
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.containerPrincipal {
+    width: 90%;
+    height: 100vh;
+    background-color: white;
+    margin: auto auto 30px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.conteintPrincipalIframe {
+    width: 98%;
+    height: 95vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.retailerContainerMenu {
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+    width: 85%;
+    margin: 5px auto;
+}
+
+.logoRetailMenu {
+    width: 100%;
+}
