@@ -156,22 +156,26 @@ async function buildTable(test) {
 
     test == 'A' && (document.body.querySelector(`.usabilitySin`).innerHTML = `Sin interacción: <span class="valorKPI">${results.usability.without}</span>`);
     document.body.querySelector(`.usabilityCon`).innerHTML = `Con interacción: <span class="valorKPI">${results.usability.with}</span>`;
-    document.body.querySelector(`.diferenceUsability`).innerHTML = `% Diferencia : ${(results.usability.with/(results.usability.with + results.usability.without)*100).toFixed(0)} %`
+    document.body.querySelector(`.diferenceUsability`).innerHTML = `Diferencia : ${(results.usability.with/(results.usability.with + results.usability.without)*100).toFixed(0)} %`
     
     /** Imprimiendo la engagement Con y Sin interacción */
     test == 'A' && (document.body.querySelector(`.engagementSin`).innerHTML = `Sin interacción: <span class="valorKPI">${Math.floor(totalTime.without / 60)} min ${totalTime.without % 60} seg</span>`);
     document.body.querySelector(`.engagemenCon`).innerHTML = `Con interacción: <span class="valorKPI">${Math.floor(totalTime.with / 60)} min ${totalTime.with % 60} seg</span>`;
-    test == 'A' && (document.body.querySelector(`.diferenceEngagement`).innerHTML = `% Diferencia : ${parseInt((totalTime.totalA / totalTime.totalB) * 100).toFixed(0)}%`);
+    test == 'A' && (document.body.querySelector(`.diferenceEngagement`).innerHTML = `Diferencia : ${parseInt((totalTime.with / totalTime.without) * 100).toFixed(0)}%`);
 
 
     test == 'A' && (document.body.querySelector(`.purchaseSin`).innerHTML =`Sin interacción <span class="valorKPI">${purchaseWithout}</span>`);
     document.body.querySelector(`.purchaseCon`).innerHTML = `Con interacción: <span class="valorKPI">${purchaseWith}</span>`;
-    // test == 'A' && (document.body.querySelector(`.diferencePurchase`).innerHTML = `% Diferencia : ${((purchaseWith/purchaseWithout) *100).toFixed(0)} %`)
+    test == 'A' && (document.body.querySelector(`.diferencePurchase`).innerHTML = `Diferencia : ${((purchaseWith/purchaseWithout) *100).toFixed(0)} %`)
 
 
 
      /** Renderizar la gráfica de usabilidad */
      graphicUsability(results.usability);
+
+    /** Renderizar la gráfica de Engagement */
+    graphicEngagement(totalTime, test);
+
 
        /** Renderizar la gráfica de Purchase */
      graphicPurchase(results.purchase, results.usability);
@@ -223,6 +227,60 @@ function graphicUsability(object, test) {
 
 
 };
+
+/** Función para renderizar la grafica de la card Engagement */
+function graphicEngagement(object, test) {
+    console.log(object.without);
+    document.body.querySelector(`.graphicEngagementRender`).innerHTML = ``;
+
+   
+
+    // let 
+    // totalWith    = Math.floor(object.without / 60) +":"+object.without % 60,
+    // totalWithout =Math.floor(object.with / 60)+":"+object.with % 60
+   
+
+    const
+    canvas = document.createElement('CANVAS');
+    canvas.id = `chartEngagement`;
+    canvas.classList.add('graphicTableKpi');
+
+    document.body.querySelector('.graphicEngagementRender').appendChild(canvas);
+
+    const ctx = document.body.querySelector(`#chartEngagement`).getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Sin', `Con`],
+            datasets: [{
+                label: 'Sin VS Con',
+                data: [object.without, object.with], // El primer valor es el valor de la referencia
+                borderWidth: 1,
+                backgroundColor: ['#ff0700', '#0e2c59'],
+                barThickness: 40,
+                borderWidth: 3,
+                borderRadius: 10
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false,
+                    position: 'top'
+                }
+            }
+        }
+    });
+
+};
+
+
 
 /** Función para renderizar la gráfica de Conversión */
 function graphicPurchase(purchase, usabilidad) {

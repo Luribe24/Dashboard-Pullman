@@ -147,8 +147,8 @@ function plusTime(object) {
         structure.without[1] = structure.without == 0 ? 0 : parseInt(structure.without[1]) * 60
         structure.without = parseInt(structure.without[0]) + parseInt(structure.without[1]) + parseInt(structure.without[2])
 
-        structure.totalA = structure.with + structure.without;
-        structure.totalB = structure.without;
+        // structure.totalA = structure.with + structure.without;
+        // structure.totalB = structure.without;
     
         return (structure)
 }
@@ -165,6 +165,9 @@ async function buildTable(test) {
         totalAUsability = results.usability.without,
         totalBUsability = results.usability.with + results.usability.without,
         diferenceUsability = (totalBUsability / totalAUsability * 100).toFixed(0)
+       console.log(diferenceUsability);
+    let
+       totalAEngagement = totalTime.with + totalTime.without    
 
 
     let
@@ -177,10 +180,10 @@ async function buildTable(test) {
     test == 'A' && (document.body.querySelector(`.diferenceUsability`).innerHTML = `% Diferencia : ${diferenceUsability} %`)
     
      /** Imprimiendo la engagement Con y Sin interacción */
-     test == 'A' && (document.body.querySelector(`.engagementA`).innerHTML = `Test B: <span class="valorKPI">${Math.floor(totalTime.totalA / 60)} min ${totalTime.totalA % 60} seg</span>`);
-     document.body.querySelector(`.engagementB`).innerHTML = `Test A: <span class="valorKPI">${Math.floor(totalTime.totalB / 60)} min ${totalTime.totalB % 60} seg</span>`;
-     test == 'A' && (document.body.querySelector(`.diferenceEngagement`).innerHTML = `% Diferencia : ${parseInt((totalTime.totalA / totalTime.totalB) * 100).toFixed(0)}%`);
-
+     test == 'A' && (document.body.querySelector(`.engagementA`).innerHTML = `Test B: <span class="valorKPI">${Math.floor(totalAEngagement / 60)} min ${totalAEngagement % 60} seg</span>`);
+     document.body.querySelector(`.engagementB`).innerHTML = `Test A: <span class="valorKPI">${Math.floor(totalTime.without / 60)} min ${totalTime.without % 60} seg</span>`;
+     test == 'A' && (document.body.querySelector(`.diferenceEngagement`).innerHTML = `% Diferencia : ${parseInt(( totalTime.without / totalAEngagement) * 100).toFixed(0)}%`);
+   console.log(totalAUsability);
     test == 'A' && (document.body.querySelector(`.purchaseA`).innerHTML = `Test B: <span class="valorKPI">${(totalBPurchase / totalBUsability * 100).toFixed(2)}</span>`);
     document.body.querySelector(`.purchaseB`).innerHTML = `Test A: <span class="valorKPI">${(totalAPurchase / totalAUsability * 100).toFixed(2)}</span>`;
     test == 'A' && (document.body.querySelector(`.diferencePurchase`).innerHTML = `% Diferencia : ${diferencePurchase} %`)
@@ -190,7 +193,8 @@ async function buildTable(test) {
     /* Se construye la gráfica de usabilidad */
     graphicUsability(results.usability, test);
 
-    
+    /** Renderizar la gráfica de Engagement */
+    graphicEngagement(totalTime, test);
 
     /* Se construye la gráfica de usabilidad */
     graphicPurchase(results.purchase, results.usability, test);
@@ -202,8 +206,10 @@ async function buildTable(test) {
 const structure = {
     testAUsability: null,
     testBUsability: null,
-    testAPurchase: null,
-    testBPurchase: null
+    testAPurchase:  null,
+    testBPurchase:  null,
+    testAEngagement:null,
+    testBEngagement:null
 };
 
 function updateGraphUsability() {
@@ -248,6 +254,7 @@ function updateGraphUsability() {
     }
 }
 
+
 function graphicUsability(object, test) {
     if (test === 'A') {
         structure.testBUsability = (object.without + object.with)
@@ -259,6 +266,63 @@ function graphicUsability(object, test) {
 }
 
 
+function updateGraphEngagement() {
+    // Verificar si ambos tests han sido cargados
+    if (structure.testAEngagement !== null && structure.testBEngagement !== null) {
+        document.body.querySelector('.graphicEngagementRender').innerHTML = ``;
+
+        const canvas = document.createElement('CANVAS');
+        canvas.id = `chartEngagement`;
+        canvas.classList.add('graphicTableKpi');
+        document.body.querySelector('.graphicEngagementRender').appendChild(canvas);
+
+        const ctx = document.body.querySelector(`#chartEngagement`).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Test A', 'Test B'],
+                datasets: [{
+                    label: 'Test A VS Test B',
+                    data: [structure.testAEngagement, structure.testBEngagement],
+                    borderWidth: 1,
+                    backgroundColor: ['#ff0700', '#0e2c59'],
+                    barThickness: 40,
+                    borderWidth: 3,
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    }
+}
+
+
+function graphicEngagement(object, test) {
+    if (test === 'A') {
+        structure.testBEngagement = (object.without + object.with)
+    } else if (test === 'B') {
+        structure.testAEngagement = object.without;
+    }
+
+    updateGraphEngagement();
+}
+
+
+
+
+// Gráfica Purchase
 function updateGraphPurchase() {
     // Verificar si ambos tests han sido cargados
     if (structure.testAPurchase !== null && structure.testBPurchase !== null) {
