@@ -15,5 +15,6 @@ btntestb.addEventListener('click',()=>{
     document.body.querySelector('.logoRetailMenu').src="";
     document.body.querySelector('.logoRetailMenu').innerHTML="";
     iframeContent.src="./components/HTML/especifictestB.html";
+    btntestb.classList.add('iconSelect');
     btnGenetal.classList.remove('iconSelect'); 
 });
